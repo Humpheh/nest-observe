@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package weave.common;
+
+enum DayOfWeek {
+    DAY_OF_WEEK_UNSPECIFIED = 0;
+    DAY_OF_WEEK_SUNDAY = 1;
+    DAY_OF_WEEK_MONDAY = 2;
+    DAY_OF_WEEK_TUESDAY = 4;
+    DAY_OF_WEEK_WEDNESDAY = 8;
+    DAY_OF_WEEK_THURSDAY = 16;
+    DAY_OF_WEEK_FRIDAY = 32;
+    DAY_OF_WEEK_SATURDAY = 64;
+}
+
+enum MonthOfYear {
+    MONTH_OF_YEAR_UNSPECIFIED = 0;
+    MONTH_OF_YEAR_JANUARY = 1;
+    MONTH_OF_YEAR_FEBRUARY = 2;
+    MONTH_OF_YEAR_MARCH = 4;
+    MONTH_OF_YEAR_APRIL = 8;
+    MONTH_OF_YEAR_MAY = 16;
+    MONTH_OF_YEAR_JUNE = 32;
+    MONTH_OF_YEAR_JULY = 64;
+    MONTH_OF_YEAR_AUGUST = 128;
+    MONTH_OF_YEAR_SEPTEMBER = 256;
+    MONTH_OF_YEAR_OCTOBER = 512;
+    MONTH_OF_YEAR_NOVEMBER = 1024;
+    MONTH_OF_YEAR_DECEMBER = 2048;
+}
+
+message ResourceId {
+    string resource_id = 1;
+}
+
+message StringRef {
+    string literal = 1;
+    uint32 reference = 2;
+}

@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+package nest.trait.hvac;
+
+import "weave.common.proto";
+import "google/protobuf/wrappers.proto";
+
+message EcoModeStateTrait {
+    enum EcoMode {
+        ECO_MODE_UNSPECIFIED = 0;
+        ECO_MODE_INACTIVE = 1;
+        ECO_MODE_MANUAL_ECO = 2;
+        ECO_MODE_AUTO_ECO = 3;
+}
+    enum EcoModeChangeReason {
+        ECO_MODE_CHANGE_REASON_UNSPECIFIED = 0;
+        ECO_MODE_CHANGE_REASON_MANUAL = 1;
+        ECO_MODE_CHANGE_REASON_STRUCTURE_MODE = 2;
+        ECO_MODE_CHANGE_REASON_OCCUPANCY = 3;
+        ECO_MODE_CHANGE_REASON_TEMPERATURE = 4;
+        ECO_MODE_CHANGE_REASON_FEATURE_ENABLE = 5;
+    }
+
+    EcoMode eco_mode = 1;
+    EcoModeChangeReason eco_mode_change_reason = 2;
+    // HVAC actor = 3
+}
+
+message AssociatedHeatlinksTrait {
+    message AssociatedHeatlink {
+        weave.common.ResourceId device_id = 1;
+        uint32 vendor_id = 2;
+        uint32 product_id = 3;
+    }
+
+    repeated AssociatedHeatlink heat_links = 1;
+}
+
+message HvacControl {
+    message Temperature {
+        float value = 1;
+    }
+
+    message TemperatureThreshold {
+        Temperature value = 1;
+        bool enabled = 2;
+    }
+}
+
+message EcoModeTrait {
+    HvacControl.Temperature current_eco_temperature_heat = 1;
+    HvacControl.Temperature current_eco_temperature_cool = 2;
+}
+
+message EcoModeSettingsTrait {
+    bool structure_mode_follow_enabled = 1;
+    HvacControl.TemperatureThreshold eco_temperature_heat = 2;
+    HvacControl.TemperatureThreshold eco_temperature_cool = 3;
+}
+
+message DisplaySettingsTrait {
+    enum FarsightDisplay {
+        FARSIGHT_DISPLAY_UNSPECIFIED = 0;
+        FARSIGHT_DISPLAY_TARGET_TEMP = 1;
+        FARSIGHT_DISPLAY_CURRENT_TEMP = 2;
+        FARSIGHT_DISPLAY_ANALOG_CLOCK = 3;
+        FARSIGHT_DISPLAY_DIGITAL_CLOCK = 4;
+        FARSIGHT_DISPLAY_WEATHER = 5;
+        FARSIGHT_DISPLAY_NONE = 6;
+    }
+
+    enum TemperatureScale {
+        TEMPERATURE_SCALE_UNSPECIFIED = 0;
+        TEMPERATURE_SCALE_C = 1;
+        TEMPERATURE_SCALE_F = 2;
+    }
+
+    FarsightDisplay farsight_display = 1;
+    TemperatureScale temperature_scale = 2;
+}
+
+message LeafTrait {
+    bool active = 1;
+    HvacControl.Temperature eco_threshold_heat = 2;
+    HvacControl.Temperature eco_threshold_cool = 3;
+    HvacControl.Temperature setpoint_threshold_heat = 4;
+    HvacControl.Temperature setpoint_threshold_cool = 5;
+    HvacControl.Temperature schedule_delta = 6;
+}
+
+message SetPointScheduleSettingsTrait {
+    enum SetPointScheduleType {
+        SET_POINT_SCHEDULE_TYPE_UNSPECIFIED = 0;
+        SET_POINT_SCHEDULE_TYPE_HEAT = 1;
+        SET_POINT_SCHEDULE_TYPE_COOL = 2;
+        SET_POINT_SCHEDULE_TYPE_RANGE = 3;
+    }
+
+    message TemperatureSetPoint {
+        SetPointScheduleType setpoint_type = 1;
+        weave.common.DayOfWeek day_of_week = 2;
+        uint32 seconds_in_day = 3;
+        HvacControl.Temperature heating_target = 4;
+        HvacControl.Temperature cooling_target = 5;
+        // TODO 6,7 = actors
+    }
+
+        string name = 1;
+    SetPointScheduleType type = 2;
+    // TODO: getSetpointsMap = 3
+}
+
+message TargetTemperatureSettingsTrait {
+    SetPointScheduleSettingsTrait.TemperatureSetPoint target_temperature = 1;
+    google.protobuf.BoolValue enabled = 2;
+}

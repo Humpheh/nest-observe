@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package weave.trait.description;
+
+message DeviceIdentityTrait {
+    uint32 vendor_id = 1;
+//    StringRef vendor_id_description = 2;
+    uint32 vendor_product_id = 3;
+//    StringRef product_id_description = 4;
+    uint32 product_revision = 5;
+    string serial_number = 6;
+    string software_version = 7;
+}

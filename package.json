@@ -1,0 +1,42 @@
+{
+  "name": "nest-observe",
+  "version": "0.1.0",
+  "description": "Unofficial API for observing Google Nest devices which works with Google authentication.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "google",
+    "nest",
+    "thermostat",
+    "api",
+    "nest thermostat e",
+    "uk",
+    "eu",
+    "unofficial",
+    "google auth"
+  ],
+  "homepage": "https://github.com/Humpheh/nest-observe",
+  "author": {
+    "name": "Humphrey Shotton",
+    "email": "humph@humpheh.com",
+    "url": "http://humpheh.com/"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Humpheh/nest-observe.git"
+  },
+  "dependencies": {
+    "google-protobuf": "^3.10.0",
+    "node-fetch": "^2.6.0",
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/google-protobuf": "^3.7.2",
+    "@types/node-fetch": "^2.5.2",
+    "prettier": "1.18.2",
+    "ts-protoc-gen": "^0.11.0"
+  }
+}

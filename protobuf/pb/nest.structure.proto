@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package nest.trait.structure;
+
+import "weave.common.proto";
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
+
+message HomeInfoSettingsTrait {
+    enum HouseType {
+        HOUSE_TYPE_UNSPECIFIED = 0;
+        HOUSE_TYPE_SINGLE_FAMILY = 1;
+        HOUSE_TYPE_MULTI_FAMILY = 2;
+        HOUSE_TYPE_CONDO = 3;
+        HOUSE_TYPE_BUSINESS = 4;
+    }
+
+    enum MeasurementScale {
+        MEASUREMENT_SCALE_UNSPECIFIED = 0;
+        MEASUREMENT_SCALE_METRIC = 1;
+        MEASUREMENT_SCALE_IMPERIAL = 2;
+    }
+
+    enum NumThermostats {
+        NUM_THERMOSTATS_UNSPECIFIED = 0;
+        NUM_THERMOSTATS_ONE = 1;
+        NUM_THERMOSTATS_TWO = 2;
+        NUM_THERMOSTATS_THREE = 3;
+        NUM_THERMOSTATS_FOUR = 4;
+        NUM_THERMOSTATS_FIVE_PLUS = 5;
+    }
+
+    enum RenovationDate {
+        RENOVATION_DATE_UNSPECIFIED = 0;
+        RENOVATION_DATE_DONT_KNOW = 1;
+        RENOVATION_DATE_PRE_1940 = 2;
+        RENOVATION_DATE_1940 = 3;
+        RENOVATION_DATE_1950 = 4;
+        RENOVATION_DATE_1960 = 5;
+        RENOVATION_DATE_1970 = 6;
+        RENOVATION_DATE_1980 = 7;
+        RENOVATION_DATE_1990 = 8;
+        RENOVATION_DATE_2000 = 9;
+        RENOVATION_DATE_2010 =10;
+    }
+
+    HouseType house_type = 1;
+    NumThermostats user_specified_num_thermostats = 2;
+    RenovationDate renovation_date = 3;
+    float structure_area = 4;
+    MeasurementScale measurement_scale = 5;
+}
+
+message StructureLocationTrait {
+    message GeoCoordinate {
+        float latitude = 1;
+        float longitude = 2;
+    }
+
+    google.protobuf.StringValue postal_code = 1;
+    google.protobuf.StringValue country_code = 2;
+    string address_lines = 3;
+    google.protobuf.StringValue city = 4;
+    google.protobuf.StringValue state = 5;
+    GeoCoordinate geo_coordinate = 6;
+}
+
+message StructureInfoTrait {
+    string structure_id = 1;
+    uint32 max_nest_guard_count = 2;
+    uint32 max_nest_sensor_count = 3;
+    uint32 max_nest_connect_count = 4;
+    uint64 primary_fabric_id = 5;
+    weave.common.ResourceId pairer_id = 6;
+    uint32 max_nest_lock_count = 7;
+    uint32 max_nest_moonstone_count = 8;
+    uint32 max_nest_protect_count = 9;
+    string name = 10;
+    google.protobuf.Timestamp created_at = 11;
+    google.protobuf.StringValue hg_id = 12;
+    map<string, uint32> max_resource_counts = 13;
+}

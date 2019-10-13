@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package nest.trait.sensor;
+
+import "google/protobuf/wrappers.proto";
+
+message TemperatureTrait {
+    message TemperatureSample {
+        google.protobuf.FloatValue temperature = 1;
+    }
+
+    TemperatureSample temperature_value = 1;
+}
+
+message HumidityTrait {
+    message HumiditySample {
+        google.protobuf.FloatValue humidity = 1;
+    }
+
+    HumiditySample humidity_value = 1;
+}

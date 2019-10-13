@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package nestlabs.gateway.v2;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+
+service GatewayService {
+    rpc Observe(ObserveRequest) returns (stream ObserveResponse);
+}
+
+message ObserveRequest {
+    repeated int32 state_types_list = 1; // (set to [2,1])?
+    // repeated string resource_ids = 2;
+    repeated TraitTypeObserveParams trait_type_params = 3;
+    repeated TraitInstanceObserveParams trait_instance_params = 4;
+    string user_id = 5;
+}
+
+message TraitInstanceObserveParams {
+    TraitId trait_id = 1;
+    uint64 monotonic_version_filters_list = 2;
+}
+
+message TraitTypeObserveParams {
+    string trait_type = 1;
+    FieldMask state_field_mask = 2;
+    uint32 observer_schema_version = 3;
+}
+
+message FieldMask {
+    repeated string paths = 1;
+}
+
+message ObserveResponse {
+    repeated ResourceMeta resource_metas = 1;
+    bool initial_resource_metas_continue = 2;
+    repeated TraitState trait_states = 3;
+    repeated TraitOperationList trait_operation_lists = 4;
+    google.protobuf.Timestamp current_time = 5;
+}
+
+message TraitOperationList {
+    TraitId trait_id = 1;
+    repeated TraitOperation trait_operations = 2; // ??
+}
+
+message TraitOperation {
+//    TraitRequest trait_request = 1;
+//    int32 progress = 2; // ENUM
+//    Status status = 3;
+//    TraitEvent event = 4;
+//    uint64 publisher_accepted_state_version = 5;
+//    TraitCommand command = 6;
+//    TraitUpdateStateRequest update = 7;
+}
+
+message ResourceMeta {
+    string resource_id = 1;
+    string type = 2;
+//    int32 status = 3; // ENUM field?
+    repeated TraitMeta trait_metas = 4;
+    uint32 schema_version = 6;
+    repeated IfaceMeta iface_metas = 7;
+}
+
+message TraitState {
+    TraitId trait_id = 1;
+//    int32 state_types_list = 2; // ENUM field
+    Patch patch = 3;
+    uint64 monotonic_version = 4;
+    uint64 publisher_version = 5;
+}
+
+message TraitMeta {
+    string trait_label = 1;
+    string type = 2;
+    SchemaVersion schema_version = 3;
+}
+
+message TraitId {
+    string resource_id = 1;
+    string trait_label = 2;
+}
+
+message IfaceMeta {
+    string iface_label = 1;
+    string type = 2;
+    map<string, string> trait_label_mapping = 3;
+    SchemaVersion schema_version = 4;
+}
+
+message Patch {
+    google.protobuf.Any values = 1;
+}
+
+message SchemaVersion {
+    uint32 current_version = 1;
+    uint32 min_compat_version = 2;
+}

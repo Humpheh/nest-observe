@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package nest.trait.service;
+
+message DeviceInfoTrait {
+    string type_name = 2;
+    string class_name = 3;
+}

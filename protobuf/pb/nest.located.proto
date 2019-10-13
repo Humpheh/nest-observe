@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package nest.trait.located;
+
+import "weave.common.proto";
+import "google/protobuf/timestamp.proto";
+
+message LocatedAnnotationsTrait {
+    enum StatusCode {
+        STATUS_CODE_UNSPECIFIED = 0;
+        STATUS_CODE_SUCCESS = 1;
+        STATUS_CODE_FAILURE = 2;
+        STATUS_CODE_MISSING_LABEL = 4096;
+        STATUS_CODE_ANNOTATION_EXISTS = 4097;
+        STATUS_CODE_MISSING_ANNOTATION = 8192;
+        STATUS_CODE_ANNOTATION_DOESNT_EXIST = 8193;
+    }
+
+    message WhereItem {
+        weave.common.ResourceId resource_id = 1;
+        weave.common.StringRef label = 2;
+        string legacy_uuid = 3;
+    }
+
+    map<uint32, WhereItem> predefined_wheres_map = 1;
+    map<uint32, WhereItem> custom_wheres_map = 2;
+}
+
+message DeviceLocatedSettingsTrait {
+    weave.common.ResourceId where_annotation_rid = 2;
+    weave.common.ResourceId fixture_annotation_rid = 3;
+    // TODO: 4
+    weave.common.StringRef where_label = 5;
+    weave.common.ResourceId where_spoken_annotation_rids = 6;
+    weave.common.StringRef fixture_name_label = 7;
+    weave.common.ResourceId fixture_spoken_annotation_rids = 8;
+    google.protobuf.Timestamp last_modified_timestamp = 9;
+    google.protobuf.Timestamp last_relocation_timestamp = 10;
+    string where_legacy_uuid = 11;
+}
