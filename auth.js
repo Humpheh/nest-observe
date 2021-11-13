@@ -1,13 +1,21 @@
 const fetch = require('node-fetch');
+const querystring = require('querystring');
 
 // Timeout other API calls after this number of seconds
 const API_TIMEOUT_SECONDS = 40;
 
 // We want to look like a browser
 const USER_AGENT_STRING =
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36';
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36';
 
-const JWT_ISSUE_URL = 'https://nestauthproxyservice-pa.googleapis.com/v1/issue_jwt';
+// Client ID of the Nest iOS application
+const CLIENT_ID =
+    '733249279899-1gpkq9duqmdp55a7e5lft1pr2smumdla.apps.googleusercontent.com';
+
+const JWT_ISSUE_URL =
+    'https://nestauthproxyservice-pa.googleapis.com/v1/issue_jwt';
+
+const TOKEN_URL = 'https://oauth2.googleapis.com/token';
 
 /**
  * Use the provided configuration to authenticate with Google and retrieve a JWT for
@@ -20,19 +28,21 @@ const JWT_ISSUE_URL = 'https://nestauthproxyservice-pa.googleapis.com/v1/issue_j
  * @param apiKey
  * @returns {Promise<{refresh: (function(): Promise<{refresh, expiry, token}>), expiry: Date, token: string}>}
  */
-const googleAuth = async (issueToken, cookies, apiKey) => {
+const googleAuth = async refreshToken => {
     // Request an access token
-    const tokenResult = await fetch(issueToken, {
-        method: 'GET',
+    const tokenResult = await fetch(TOKEN_URL, {
+        method: 'POST',
         redirect: 'follow',
         timeout: API_TIMEOUT_SECONDS * 1000,
         headers: {
-            'Sec-Fetch-Mode': 'cors',
+            'Content-Type': 'application/x-www-form-urlencoded',
             'User-Agent': USER_AGENT_STRING,
-            'X-Requested-With': 'XmlHttpRequest',
-            Referer: 'https://accounts.google.com/o/oauth2/iframe',
-            cookie: cookies,
         },
+        body: querystring.stringify({
+            refresh_token: refreshToken,
+            client_id: CLIENT_ID,
+            grant_type: 'refresh_token',
+        }),
     });
     const tokenJSON = await tokenResult.json();
     const googleAccessToken = tokenJSON.access_token;
@@ -51,9 +61,8 @@ const googleAuth = async (issueToken, cookies, apiKey) => {
         headers: {
             Authorization: 'Bearer ' + googleAccessToken,
             'User-Agent': USER_AGENT_STRING,
-            'x-goog-api-key': apiKey,
             Referer: 'https://home.nest.com',
-        }
+        },
     });
     const jwtJSON = await jwtResult.json();
     const googleJWT = jwtJSON.jwt;
